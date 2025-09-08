@@ -1,0 +1,22 @@
+name: CI on Pi
+
+on:
+  push:
+
+jobs:
+  build-test-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Ensure Python installed
+        run: sudo apt-get update && sudo apt-get install -y python3 python3-pip
+
+      - name: Run unit tests
+        run: python3 -m unittest discover
+
+      - name: Deploy (runs only if tests passed)
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
